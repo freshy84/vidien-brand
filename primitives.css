@@ -1,0 +1,368 @@
+/*
+ * Brand visual primitives — reusable ribbon/aura/pulse utilities, button +
+ * nav-item hover effects. Depends on brand/tokens.css being loaded first.
+ */
+
+
+/* ---------------- Aura ---------------- */
+
+@keyframes aura-drift {
+  0%, 100% { transform: translate3d(-2%, -3%, 0) scale(1); }
+  33%      { transform: translate3d(3%, -1%, 0) scale(1.05); }
+  66%      { transform: translate3d(-1%, 4%, 0) scale(0.97); }
+}
+@keyframes aura-drift-alt {
+  0%, 100% { transform: translate3d(4%, 2%, 0) scale(1.02); }
+  50%      { transform: translate3d(-3%, -2%, 0) scale(0.95); }
+}
+@keyframes aura-pulse {
+  0%, 100% { opacity: 0.85; }
+  50%      { opacity: 1; }
+}
+
+.aura {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: radial-gradient(
+    closest-side at 50% 50%,
+    color-mix(in srgb, var(--aura-2) 35%, transparent),
+    transparent 70%
+  );
+  animation: aura-pulse 6s ease-in-out infinite;
+}
+.aura::before,
+.aura::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  border-radius: 9999px;
+  filter: blur(28px);
+  will-change: transform;
+}
+.aura::before {
+  background:
+    radial-gradient(closest-side at 30% 40%, color-mix(in srgb, var(--aura-1) 80%, transparent), transparent 60%),
+    radial-gradient(closest-side at 70% 60%, color-mix(in srgb, var(--aura-3) 70%, transparent), transparent 60%);
+  animation: aura-drift 12s ease-in-out infinite;
+}
+.aura::after {
+  background: radial-gradient(
+    closest-side at 60% 35%,
+    color-mix(in srgb, var(--aura-2) 75%, transparent),
+    transparent 65%
+  );
+  animation: aura-drift-alt 9s ease-in-out infinite;
+  mix-blend-mode: screen;
+}
+
+/* Ambient quieter version — for backgrounds where the brand should feel
+ * "present" without competing with foreground content. */
+.aura-halo {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(80px);
+  opacity: 0.18;
+  background:
+    radial-gradient(closest-side at 35% 40%, var(--aura-1), transparent 60%),
+    radial-gradient(closest-side at 65% 55%, var(--aura-2), transparent 60%),
+    radial-gradient(closest-side at 50% 60%, var(--aura-3), transparent 65%);
+  animation: aura-drift 18s ease-in-out infinite;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* ---------------- Pulse echoes ---------------- */
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.4; transform: scale(0.85); }
+  50%      { opacity: 1;   transform: scale(1); }
+}
+.pulse-dot {
+  animation: pulse-soft 6s ease-in-out infinite;
+  will-change: opacity, transform;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-accent) 25%, transparent); }
+  50%      { box-shadow: 0 0 0 6px color-mix(in srgb, var(--color-accent) 0%, transparent); }
+}
+.pulse-ring {
+  animation: pulse-glow 3.2s ease-out infinite;
+}
+
+/* ---------------- Display type ---------------- */
+
+.display {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+}
+
+/* ---------------- Ribbon ---------------- */
+
+@keyframes ribbon-drift {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+@keyframes ribbon-drift-reverse {
+  0%   { background-position: 200% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Gradient-filled text. Drift at 14s for the brand-signature shimmer. */
+.text-ribbon {
+  background-image: var(--ribbon-h);
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: ribbon-drift 14s linear infinite;
+  background-color: var(--color-accent);
+}
+
+/* Single-line animated divider. */
+.divider-ribbon {
+  height: 1px;
+  width: 100%;
+  border: 0;
+  background-image: var(--ribbon-h);
+  background-size: 200% 100%;
+  opacity: 0.6;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 18%, black 82%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, black 18%, black 82%, transparent 100%);
+  animation: ribbon-drift 18s linear infinite;
+}
+
+/* Vertical ribbon — for timelines / spines. */
+.spine-ribbon {
+  background: var(--ribbon-v);
+  opacity: 0.55;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, black 8%, black 92%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, black 8%, black 92%, transparent 100%);
+}
+
+/* Inline link underline. */
+.underline-ribbon {
+  border-bottom: 1px solid transparent;
+  border-image-source: var(--ribbon-h);
+  border-image-slice: 1;
+  padding-bottom: 1px;
+}
+
+/* ---------------- Ribbon icon (SVG gradient fill) ---------------- */
+
+/* Requires <RibbonDefs /> mounted somewhere in the document — it provides
+ * the #brand-ribbon-gradient and #brand-ribbon-gradient-animated
+ * linearGradient definitions that these rules reference. */
+
+.ribbon-icon svg {
+  color: transparent;
+  transition: filter 220ms ease-out, transform 220ms ease-out;
+}
+.ribbon-icon svg path,
+.ribbon-icon svg rect,
+.ribbon-icon svg circle,
+.ribbon-icon svg polygon,
+.ribbon-icon svg polyline,
+.ribbon-icon svg line {
+  fill: url(#brand-ribbon-gradient);
+  stroke: url(#brand-ribbon-gradient);
+}
+
+/* Outline-only variant — paints just the stroke (skips the fill). */
+.ribbon-icon-outline svg path,
+.ribbon-icon-outline svg rect,
+.ribbon-icon-outline svg circle,
+.ribbon-icon-outline svg polygon,
+.ribbon-icon-outline svg polyline,
+.ribbon-icon-outline svg line {
+  fill: none;
+  stroke: url(#brand-ribbon-gradient);
+}
+
+/* ---------------- Ribbon-bordered surfaces ---------------- */
+
+/* Animated rainbow gradient border via the dual-background border-box trick:
+ * inner padding-box paints --color-bg (opaque), outer border-box paints the
+ * ribbon, the 1px transparent border is the strip the ribbon shows through. */
+.card-ribbon {
+  background:
+    linear-gradient(var(--color-bg), var(--color-bg)) padding-box,
+    var(--ribbon-h) border-box;
+  background-size: 100% 100%, 200% 100%;
+  background-position: 0 0, 0 50%;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  animation: ribbon-drift 14s linear infinite;
+}
+
+/* Soft card — quiet container with atmospheric depth, no rainbow border. */
+.card-soft {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-surface) 70%, transparent) 0%,
+    color-mix(in srgb, var(--color-surface) 40%, transparent) 100%
+  );
+  border: 1px solid color-mix(in srgb, var(--color-border) 60%, transparent);
+  border-radius: var(--radius-lg);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.04),
+    0 1px 0 0 rgba(0, 0, 0, 0.4),
+    0 14px 40px -20px rgba(0, 0, 0, 0.6);
+  transition:
+    border-color 320ms ease-out,
+    box-shadow 320ms ease-out,
+    transform 240ms ease-out;
+}
+.card-soft:hover {
+  border-color: color-mix(in srgb, var(--color-border-strong) 70%, transparent);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.06),
+    0 1px 0 0 rgba(0, 0, 0, 0.4),
+    0 18px 48px -18px rgba(251, 113, 133, 0.18);
+}
+
+/* Pill variant — same trick, full radius. For inline badges + KPIs. */
+.pill-ribbon {
+  background:
+    linear-gradient(var(--color-bg), var(--color-bg)) padding-box,
+    var(--ribbon-h) border-box;
+  background-size: 100% 100%, 200% 100%;
+  background-position: 0 0, 0 50%;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  animation: ribbon-drift 14s linear infinite;
+}
+
+/* ---------------- Button system ---------------- */
+
+/* PRIMARY — rainbow gradient border + spectral glow halo. THE main CTA. */
+.btn-ribbon-outline {
+  position: relative;
+  background:
+    linear-gradient(var(--color-bg), var(--color-bg)) padding-box,
+    var(--ribbon-h) border-box;
+  background-size: 100% 100%, 220% 100%;
+  background-position: 0 0, 0 50%;
+  color: var(--color-fg);
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-md);
+  animation: ribbon-drift 12s linear infinite;
+  box-shadow:
+    0 0 14px -2px rgba(251, 113, 133, 0.30),
+    0 0 28px -8px rgba(96, 165, 250, 0.25);
+  transition:
+    box-shadow 240ms ease-out,
+    transform 120ms ease-out;
+}
+.btn-ribbon-outline:hover {
+  box-shadow:
+    0 0 18px -2px rgba(251, 113, 133, 0.45),
+    0 0 36px -6px rgba(96, 165, 250, 0.35);
+}
+.btn-ribbon-outline:active {
+  transform: translateY(1px);
+}
+
+/* SECONDARY — minimal grey outline, no glow, transparent inside. */
+.btn-ribbon-secondary {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-fg-muted);
+  transition:
+    border-color 220ms ease-out,
+    color 220ms ease-out,
+    box-shadow 240ms ease-out,
+    transform 120ms ease-out;
+}
+.btn-ribbon-secondary:hover {
+  border-color: var(--color-border-strong);
+  color: var(--color-fg);
+}
+.btn-ribbon-secondary:active {
+  transform: translateY(1px);
+  border-color: var(--color-fg-subtle);
+  box-shadow: 0 0 16px -4px rgba(96, 165, 250, 0.20);
+}
+
+/* Disabled — unified across levels. */
+.btn-ribbon-outline:disabled,
+.btn-ribbon-secondary:disabled,
+.btn-ribbon-outline[aria-disabled="true"],
+.btn-ribbon-secondary[aria-disabled="true"] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+  animation: none;
+  box-shadow: none;
+}
+
+/* ---------------- Menu-item hover (text + icon + lift) ---------------- */
+
+.brand-menu-item:hover .ribbon-icon svg path,
+.brand-menu-item:hover .ribbon-icon svg rect,
+.brand-menu-item:hover .ribbon-icon svg circle,
+.brand-menu-item:hover .ribbon-icon svg polygon,
+.brand-menu-item:hover .ribbon-icon svg polyline,
+.brand-menu-item:hover .ribbon-icon svg line {
+  fill: url(#brand-ribbon-gradient-animated);
+  stroke: url(#brand-ribbon-gradient-animated);
+}
+.brand-menu-item:hover .ribbon-icon svg {
+  transform: scale(1.08);
+  filter: drop-shadow(0 0 6px rgba(251, 113, 133, 0.45));
+}
+
+.menu-label {
+  background-image: var(--ribbon-h);
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: var(--color-fg);
+  -webkit-text-fill-color: var(--color-fg);
+  transition: -webkit-text-fill-color 220ms ease-out;
+}
+.brand-menu-item:hover .menu-label {
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: ribbon-drift 3s linear infinite;
+}
+
+/* ---------------- Primary button (amber → ribbon on hover) ---------------- */
+
+.btn-ribbon {
+  background-color: var(--color-accent);
+  background-image: none;
+  background-size: 200% 100%;
+  transition: background-color 220ms ease-out;
+}
+.btn-ribbon:hover {
+  background-color: transparent;
+  background-image: var(--ribbon-h);
+  animation: ribbon-drift 3s linear infinite;
+}
+
+/* ---------------- Reduced motion ---------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .aura,
+  .aura::before,
+  .aura::after,
+  .aura-halo,
+  .pulse-dot,
+  .pulse-ring,
+  .text-ribbon,
+  .divider-ribbon,
+  .card-ribbon,
+  .pill-ribbon { animation: none; }
+
+  .ribbon-icon svg { transition: none; }
+  .brand-menu-item:hover .ribbon-icon svg { transform: none; }
+  .brand-menu-item:hover .menu-label,
+  .btn-ribbon:hover { animation: none; }
+}

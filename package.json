@@ -1,0 +1,37 @@
+{
+  "name": "vidien-brand",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Shared design tokens, primitives, and components for vidien.ai and app.vidien.ai.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "files": [
+    "components",
+    "assets",
+    "tokens.css",
+    "primitives.css",
+    "tokens.ts",
+    "index.ts",
+    "README.md"
+  ],
+  "exports": {
+    ".": "./index.ts",
+    "./tokens.css": "./tokens.css",
+    "./primitives.css": "./primitives.css",
+    "./tokens": "./tokens.ts",
+    "./components/RibbonWave": "./components/RibbonWave.tsx",
+    "./components/RibbonBreak": "./components/RibbonBreak.tsx",
+    "./components/RibbonDefs": "./components/RibbonDefs.tsx",
+    "./assets/wordmark.png": "./assets/wordmark.png"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
