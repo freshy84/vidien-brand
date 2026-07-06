@@ -82,12 +82,24 @@ import { colors, ribbonStops, fonts } from "vidien-brand";
 | Path | Purpose |
 |---|---|
 | `tokens.css` | CSS variables: `--color-*`, `--ribbon-h/v`, `--aura-*`, `--font-*`, `--radius-*`, plus a Tailwind v4 `@theme inline` bridge. |
-| `primitives.css` | Utility classes: `.text-ribbon`, `.ribbon-icon`, `.ribbon-icon-outline`, `.menu-label`, `.card-ribbon`, `.card-soft`, `.pill-ribbon`, `.btn-ribbon-outline`, `.btn-ribbon-secondary`, `.divider-ribbon`, `.spine-ribbon`, `.underline-ribbon`, `.display`, `.aura`, `.aura-halo`, `.pulse-dot`, `.pulse-ring`, plus keyframes + a `prefers-reduced-motion` block. |
+| `primitives.css` | Utility classes: `.text-ribbon`, `.ribbon-icon`, `.ribbon-icon-outline`, `.menu-label`, `.btn-label-ribbon`, `.card-ribbon`, `.card-soft`, `.pill-ribbon`, `.btn-ribbon-outline`, `.btn-ribbon-secondary`, `.divider-ribbon`, `.spine-ribbon`, `.underline-ribbon`, `.display`, `.aura`, `.aura-halo`, `.pulse-dot`, `.pulse-ring`, plus keyframes + a `prefers-reduced-motion` block. |
 | `tokens.ts` | JS/TS exports of the same values (`colors`, `aura`, `ribbonStops`, `fonts`, `radii`). |
 | `components/RibbonWave.tsx` | A single animated spectral wave. |
 | `components/RibbonBreak.tsx` | Stacked `RibbonWave`(s) with seeded per-section variation — animated section dividers. |
 | `components/RibbonDefs.tsx` | The `<linearGradient>` defs (`#brand-ribbon-gradient` + `-animated`) that `.ribbon-icon` references. |
 | `assets/wordmark.png` | The rainbow "Vidien" script wordmark (1091×306 RGBA). |
+
+## Signature button hover
+
+Every primary button uses the same move: the label is calm at rest and fills with the drifting spectral gradient on hover. Wrap the label in `.btn-label-ribbon`:
+
+```tsx
+<button className="btn-ribbon-outline ...">
+  <span className="btn-label-ribbon">Start free →</span>
+</button>
+```
+
+Works on any `<button>` or `<a>` whose direct child is the span. Honors `prefers-reduced-motion`.
 
 ## Versioning
 

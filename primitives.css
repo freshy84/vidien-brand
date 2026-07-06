@@ -347,6 +347,27 @@
   animation: ribbon-drift 3s linear infinite;
 }
 
+/* ---------------- Button label (fills with the ribbon on hover) ---------------- */
+
+/* Wrap a button or link's text in <span class="btn-label-ribbon"> and the label
+ * shows its normal colour at rest, then fills with the drifting spectral
+ * gradient when its button/anchor is hovered. The brand's signature CTA hover,
+ * used on every primary button. */
+.btn-label-ribbon {
+  background-image: var(--ribbon-h);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: currentColor;
+  transition: -webkit-text-fill-color 200ms ease-out;
+}
+button:hover > .btn-label-ribbon,
+a:hover > .btn-label-ribbon {
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: ribbon-drift 3s linear infinite;
+}
+
 /* ---------------- Reduced motion ---------------- */
 
 @media (prefers-reduced-motion: reduce) {
@@ -364,5 +385,7 @@
   .ribbon-icon svg { transition: none; }
   .brand-menu-item:hover .ribbon-icon svg { transform: none; }
   .brand-menu-item:hover .menu-label,
-  .btn-ribbon:hover { animation: none; }
+  .btn-ribbon:hover,
+  button:hover > .btn-label-ribbon,
+  a:hover > .btn-label-ribbon { animation: none; }
 }
